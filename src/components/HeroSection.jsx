@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, ArrowRight, Lock, Zap, CheckCircle2, Terminal, ShieldAlert, Cpu, Sparkles } from 'lucide-react';
 
-export default function HeroSection({ onOpenConsole, onSimulateAttack }) {
+export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTour }) {
   return (
     <div className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200 dark:border-slate-800 transition-colors">
       {/* Background Glows */}
@@ -48,6 +48,14 @@ export default function HeroSection({ onOpenConsole, onSimulateAttack }) {
             >
               <span>Launch Interactive SecOps Console</span>
               <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={onOpenTour}
+              className="px-5 py-3 rounded-xl font-semibold text-sm bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 transition-all flex items-center space-x-2 shadow-sm active:scale-95"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>30s Evaluator Guide</span>
             </button>
 
             <a

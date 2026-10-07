@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, AlertOctagon, RotateCcw, RotateCw, FlaskConical, Terminal } from 'lucide-react';
+import { Zap, AlertOctagon, RotateCcw, RotateCw, FlaskConical, Terminal, Sparkles } from 'lucide-react';
 
 export default function SimulationBar({
   onSimulateAction,
@@ -8,16 +8,26 @@ export default function SimulationBar({
   onRollback,
   onReset,
   isAttacked,
-  isSandboxMode
+  isSandboxMode,
+  onOpenTour
 }) {
   return (
     <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 transition-all max-w-[95vw]">
       <div className="bg-white/95 dark:bg-[#131C31]/95 backdrop-blur-md border border-slate-300 dark:border-slate-700/80 rounded-xl shadow-2xl p-2 flex flex-wrap items-center gap-2 text-xs">
-        {/* Title */}
+        {/* Title & 30s Guide */}
         <div className="flex items-center space-x-1.5 px-2 py-1 text-slate-500 dark:text-slate-400 font-mono text-[11px] border-r border-slate-200 dark:border-slate-800">
           <Terminal className="w-3.5 h-3.5" />
-          <span className="font-semibold text-slate-800 dark:text-slate-200">Interactive Controls</span>
+          <span className="font-semibold text-slate-800 dark:text-slate-200">Controls</span>
         </div>
+
+        <button
+          onClick={onOpenTour}
+          className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/80 text-emerald-800 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800 transition-all active:scale-95"
+          title="Open 30-Second Evaluator Guide"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>30s Guide</span>
+        </button>
 
         {/* 1. Test Normal Verified Action */}
         <button
