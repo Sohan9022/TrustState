@@ -1,7 +1,7 @@
 import React from 'react';
-import { Shield, ArrowRight, Lock, Zap, CheckCircle2, Terminal, ShieldAlert, Cpu, Sparkles } from 'lucide-react';
+import { Shield, ArrowRight, Lock, Zap, CheckCircle2, Terminal, ShieldAlert, Cpu, Sparkles, Presentation } from 'lucide-react';
 
-export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTour }) {
+export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTour, onOpenPresentation }) {
   return (
     <div className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200 dark:border-slate-800 transition-colors">
       {/* Background Glows */}
@@ -56,6 +56,14 @@ export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTou
             >
               <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>30s Evaluator Guide</span>
+            </button>
+
+            <button
+              onClick={onOpenPresentation}
+              className="px-5 py-3 rounded-xl font-semibold text-sm bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80 transition-all flex items-center space-x-2 shadow-sm active:scale-95"
+            >
+              <Presentation className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>Pitch Deck (8 Slides)</span>
             </button>
 
             <a

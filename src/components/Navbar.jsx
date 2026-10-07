@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Sun, Moon, ShieldAlert, Cpu, Activity, Terminal, ArrowRight, ExternalLink, Sparkles } from 'lucide-react';
+import { Shield, Sun, Moon, ShieldAlert, Cpu, Activity, Terminal, ArrowRight, ExternalLink, Sparkles, Presentation } from 'lucide-react';
 
 export default function Navbar({
   viewMode, // 'landing' | 'console'
@@ -11,7 +11,8 @@ export default function Navbar({
   incidentCount,
   theme,
   onToggleTheme,
-  onOpenTour
+  onOpenTour,
+  onOpenPresentation
 }) {
   const trustedCount = agents.filter(a => a.status === 'TRUSTED').length;
   const quarantinedCount = agents.filter(a => a.status === 'QUARANTINED').length;
@@ -100,6 +101,16 @@ export default function Navbar({
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>30s PM Tour</span>
+            </button>
+
+            <button
+              onClick={onOpenPresentation}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all flex items-center space-x-1.5 shadow-sm"
+              title="8-Slide Executive Pitch Deck & Downloadable .PPTX"
+            >
+              <Presentation className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <span className="hidden md:inline">Pitch Deck (8 Slides)</span>
+              <span className="md:hidden">Deck</span>
             </button>
           </div>
 

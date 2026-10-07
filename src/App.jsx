@@ -10,6 +10,7 @@ import StateTimeline from './components/StateTimeline';
 import TransitionReview from './components/TransitionReview';
 import IncidentResponse from './components/IncidentResponse';
 import QuickTourModal from './components/QuickTourModal';
+import PresentationModal from './components/PresentationModal';
 import { INITIAL_AGENTS, INITIAL_ACTIONS_STREAM, INITIAL_PENDING_PROPOSALS } from './data/initialState';
 import { ShieldCheck, ShieldAlert, X, ArrowRight, Terminal } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export default function App() {
   const [incidents, setIncidents] = useState([]);
   const [toast, setToast] = useState(null);
   const [isTourOpen, setIsTourOpen] = useState(false);
+  const [isPresentationOpen, setIsPresentationOpen] = useState(false);
 
   // Synchronize theme with HTML document element
   useEffect(() => {
@@ -343,6 +345,7 @@ export default function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
         onOpenTour={() => setIsTourOpen(true)}
+        onOpenPresentation={() => setIsPresentationOpen(true)}
       />
 
       {/* VIEW 1: TOP-TIER CYBERSECURITY COMPANY HOMEPAGE */}
@@ -353,6 +356,7 @@ export default function App() {
             onOpenConsole={() => setViewMode('console')}
             onSimulateAttack={handleSimulateAttack}
             onOpenTour={() => setIsTourOpen(true)}
+            onOpenPresentation={() => setIsPresentationOpen(true)}
           />
 
           {/* Architecture Visualizer Section */}
@@ -509,6 +513,12 @@ export default function App() {
         onRunAttack={handleSimulateAttack}
       />
 
+      {/* 8-Slide Executive Presentation Modal */}
+      <PresentationModal
+        isOpen={isPresentationOpen}
+        onClose={() => setIsPresentationOpen(false)}
+      />
+
       {/* Enterprise Footer */}
       <footer className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#070B14] py-12 text-xs text-slate-500 dark:text-slate-400 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -526,8 +536,23 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-medium">
+              <button
+                onClick={() => setIsPresentationOpen(true)}
+                className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline flex items-center space-x-1"
+              >
+                <span>📊 Executive Pitch Deck (8 Slides)</span>
+              </button>
+              <span>•</span>
+              <a href="/TrustState_Executive_Presentation.pptx" download className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
+                Download .PPTX
+              </a>
+              <span>•</span>
+              <a href="https://trust-state-eight.vercel.app/#architecture" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
+                #Architecture
+              </a>
+              <span>•</span>
               <a href="https://github.com/Sohan9022/TrustState/blob/main/PRD.md" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
-                PRD Specification (v2.0)
+                PRD (v2.0)
               </a>
               <span>•</span>
               <a href="https://github.com/Sohan9022/TrustState/blob/main/INTERVIEW_PLAYBOOK.md" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
@@ -535,7 +560,7 @@ export default function App() {
               </a>
               <span>•</span>
               <a href="https://github.com/Sohan9022/TrustState" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
-                GitHub Repository
+                GitHub
               </a>
             </div>
           </div>
