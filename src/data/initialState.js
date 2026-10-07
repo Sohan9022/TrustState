@@ -5,6 +5,7 @@ export const INITIAL_AGENTS = [
     framework: "LangGraph v0.2.14",
     role: "Automated Ledger Reconciliation & Payment Processing",
     status: "TRUSTED", // "TRUSTED" | "QUARANTINED" | "REVIEW_REQUIRED"
+    executionMode: "COMMITTED", // "COMMITTED" (Production) | "SANDBOX" (Experimentation)
     activeStateId: "S101",
     expectedHash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     observedHash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -49,7 +50,8 @@ export const INITIAL_AGENTS = [
     framework: "CrewAI v0.51",
     role: "Tier-2 Enterprise Customer Support & Ticket Resolution",
     status: "TRUSTED",
-    activeStateId: "S084",
+    executionMode: "SANDBOX", // Experimenting with prompt variants; privileged tools restricted
+    activeStateId: "S084-sandbox",
     expectedHash: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
     observedHash: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
     lastVerified: "14 seconds ago",
@@ -88,6 +90,7 @@ export const INITIAL_AGENTS = [
     framework: "LangGraph v0.2.14",
     role: "Continuous Deployment Canary Evaluator",
     status: "TRUSTED",
+    executionMode: "COMMITTED",
     activeStateId: "S210",
     expectedHash: "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
     observedHash: "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
