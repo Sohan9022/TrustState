@@ -97,8 +97,6 @@ export default function Navbar({
           <div className="flex items-center space-x-3 text-xs">
             <div className="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-[#131C31] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-mono text-[11px]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>12.4ms P95</span>
-              <span className="text-slate-300 dark:text-slate-700">|</span>
               <span>{trustedCount}/{agents.length} Trusted</span>
             </div>
 

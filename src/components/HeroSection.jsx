@@ -18,12 +18,17 @@ export default function HeroSection({ onOpenConsole, onSimulateAttack }) {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1]">
-            Stop Runtime Agent Hijacking. <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">
-              Cryptographically Verify State
-            </span> Before Privileged Actions.
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+              Stop Runtime Agent Hijacking.
+            </h1>
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-700 dark:text-slate-200">
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">
+                Cryptographically Verify State
+              </span>{" "}
+              Before Privileged Actions.
+            </p>
+          </div>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">

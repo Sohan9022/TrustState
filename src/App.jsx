@@ -491,7 +491,7 @@ export default function App() {
           </div>
 
           <div className="pt-6 border-t border-slate-200 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
-            <span>RFC 8785 Canonical JSON Hashing · Sub-15ms Local Redis Cache · Model Context Protocol (MCP)</span>
+            <span>Zero-Trust Runtime Integrity Control Plane</span>
             <span>0→1 Product Management & AI Systems Architecture</span>
           </div>
         </div>
