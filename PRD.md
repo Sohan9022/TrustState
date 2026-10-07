@@ -183,39 +183,11 @@ A malicious document can still influence an LLM's natural language reasoning. Tr
 
 ## 7. State Lifecycle & Transitions
 
-```mermaid
-stateDiagram-v2
-    [*] --> InitialRegistration: Agent Spec Loaded
-    InitialRegistration --> Trusted: Policy Validated & SHA-256 Committed
-    
-    state Trusted {
-        [*] --> Executing
-        Executing --> ProposeMutation: Agent or User updates rules/memory
-        Executing --> PrivilegedToolCall: Agent requests consequential action
-    }
-
-    state ProposeMutation {
-        [*] --> SandboxEvaluation: Run Invariant Engine
-        SandboxEvaluation --> HumanReview: High-Risk Transition
-        SandboxEvaluation --> AutoCommit: Low-Risk / Validated Diff
-        HumanReview --> StateRejected: Rejected by Admin
-        HumanReview --> AutoCommit: Approved by Admin
-        AutoCommit --> StateCommitted: New Hash Generated
-    }
-
-    StateCommitted --> Trusted: Active State = S_new
-    StateRejected --> Trusted: Rollback to S_previous
-
-    state PrivilegedToolCall {
-        [*] --> HashVerification: Compare Active State vs Expected Hash
-        HashVerification --> LeaseIssued: Match & Tool Permitted
-        HashVerification --> Quarantined: Mismatch / Policy Violation
-    }
-
-    LeaseIssued --> Executing: Tool Executed via Proxy
-    Quarantined --> IncidentResponse: Circuit Breaker Tripped
-    IncidentResponse --> Trusted: Admin Rollback & Release
-```
+Every protected execution state progresses through four distinct lifecycle phases:
+1. **Registration:** Baseline state definition loaded and canonicalized via RFC 8785.
+2. **Commitment:** Evaluated against baseline policies and anchored with a SHA-256 hash ($H_{state}$).
+3. **Execution & Leases:** Consequential tool invocations are gated by short-lived cryptographic leases ($T_{lease}$) issued upon state verification.
+4. **Transition / Rollback:** Proposed state mutations are evaluated in the sandbox pipeline; unapproved drift triggers immediate quarantine and rollback to the prior safe checkpoint.
 
 ### 7.1 State Registration & Canonicalization
 To avoid hash mismatches caused by key reordering or whitespace variations:
@@ -465,13 +437,3 @@ Before commercialization, conduct structured customer interviews with 15 Enterpr
 4. *Would a verifiable state lease token allow your AppSec team to grant agents database write access?*
 5. *Where must enforcement live in your stack: within LangGraph/CrewAI, at the MCP Gateway, or at the API Gateway (Kong/Apigee)?*
 
----
-
-## 18. Interview Playbook & Defensibility Cheat Sheet
-
-### The 30-Second Elevator Pitch
-> *"Traditional access control answers: 'Is this agent allowed to call this API?' But in autonomous agents that retain memory, ingest untrusted context, and dynamically select tools, that's not enough. You must also ask: **'Is the agent still operating under the authorized, untampered state under which that permission was granted?'** TrustState is a zero-trust runtime control plane that separates state proposal from state authorization. The agent can propose changes, but only TrustState cryptographically commits trusted state and gatekeeps privileged execution."*
-
-### Defensibility FAQ: Why Won't Existing Gateways Build This?
-- **Why not Kong / Apigee / Cloudflare?** Traditional API gateways inspect static HTTP headers and bearer tokens. They have zero visibility into an agent's internal prompt history, conversational drift, dynamic graph state, or memory evolution.
-- **Why not LangChain / LlamaIndex guardrails?** Putting the root of trust inside the agent framework violates the core security principle of separation of duties. If the framework or process is compromised, the guardrail is compromised. TrustState operates as an independent, decoupled inline tool proxy.
