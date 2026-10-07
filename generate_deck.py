@@ -7,6 +7,8 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
 def create_deck():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    logo_path = os.path.join(script_dir, "public", "truststate-logo.png")
     prs = Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
@@ -74,6 +76,10 @@ def create_deck():
             p_s.font.color.rgb = TEXT_MUTED
             p_s.font.name = "Calibri"
 
+        # Brand Logo in top right
+        if os.path.exists(logo_path):
+            slide.shapes.add_picture(logo_path, Inches(12.0), Inches(0.4), Inches(0.55), Inches(0.55))
+
     def add_card(slide, left, top, width, height, bg_color=PANEL_WHITE, border_color=PANEL_BORDER):
         card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
         card.fill.solid()
@@ -98,8 +104,14 @@ def create_deck():
     p.font.color.rgb = EMERALD
     p.alignment = PP_ALIGN.CENTER
 
-    # Main Brand
-    brand_box = s1.shapes.add_textbox(Inches(0.8), Inches(1.4), Inches(6.8), Inches(1.1))
+    # Main Brand with Catchy Logo
+    if os.path.exists(logo_path):
+        s1.shapes.add_picture(logo_path, Inches(0.8), Inches(1.45), Inches(0.9), Inches(0.9))
+        brand_left = Inches(1.85)
+    else:
+        brand_left = Inches(0.8)
+
+    brand_box = s1.shapes.add_textbox(brand_left, Inches(1.35), Inches(5.8), Inches(1.1))
     p = brand_box.text_frame.paragraphs[0]
     p.text = "TrustState"
     p.font.size = Pt(46)
@@ -505,7 +517,9 @@ def create_deck():
     # Save presentation
     output_filename = "TrustState_Executive_Presentation.pptx"
     prs.save(output_filename)
-    print(f"Presentation saved successfully to {output_filename}")
+    public_output = os.path.join(script_dir, "public", "TrustState_Executive_Presentation.pptx")
+    prs.save(public_output)
+    print(f"Presentation saved successfully to {output_filename} and {public_output}")
 
 if __name__ == "__main__":
     create_deck()

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Download, ExternalLink, ShieldCheck, Zap, FlaskConical, AlertOctagon, Presentation } from 'lucide-react';
+import { TrustStateMark } from './TrustStateLogo';
 
 export default function PresentationModal({ isOpen, onClose }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -377,7 +378,8 @@ export default function PresentationModal({ isOpen, onClose }) {
       <div className="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-2xl max-w-5xl w-full shadow-2xl overflow-hidden flex flex-col h-[92vh]">
         {/* Top Header Bar */}
         <div className="px-5 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-[#0F172A]">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2.5">
+            <TrustStateMark size={18} />
             <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30">
               EXECUTIVE PRESENTATION DECK
             </span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Sun, Moon, ShieldAlert, ExternalLink, Sparkles, Presentation, ArrowRight } from 'lucide-react';
+import TrustStateLogo from './TrustStateLogo';
 
 export default function Navbar({
   viewMode, // 'landing' | 'console'
@@ -49,21 +50,11 @@ export default function Navbar({
     <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0B1120]/95 backdrop-blur-md transition-colors shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
-          {/* Brand */}
-          <div
-            className="flex items-center space-x-2.5 cursor-pointer shrink-0"
+          {/* Brand Logo */}
+          <TrustStateLogo
+            size={28}
             onClick={() => handleNavClick('landing')}
-          >
-            <div className="w-8 h-8 rounded-lg bg-emerald-600 dark:bg-emerald-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-              <Shield className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex items-center space-x-1.5">
-              <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">TrustState</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-semibold">
-                v2.0
-              </span>
-            </div>
-          </div>
+          />
 
           {/* Center Clean Nav Links */}
           <nav className="hidden md:flex items-center space-x-1 text-xs font-semibold">

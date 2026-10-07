@@ -11,6 +11,7 @@ import TransitionReview from './components/TransitionReview';
 import IncidentResponse from './components/IncidentResponse';
 import QuickTourModal from './components/QuickTourModal';
 import PresentationModal from './components/PresentationModal';
+import TrustStateLogo from './components/TrustStateLogo';
 import { INITIAL_AGENTS, INITIAL_ACTIONS_STREAM, INITIAL_PENDING_PROPOSALS } from './data/initialState';
 import { ShieldCheck, ShieldAlert, X, ArrowRight, Terminal } from 'lucide-react';
 
@@ -528,12 +529,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-slate-900 dark:text-white text-sm">TrustState</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-semibold">
-                  v2.0
-                </span>
-              </div>
+              <TrustStateLogo
+                size={22}
+                onClick={() => { setViewMode('landing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              />
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
                 Zero-Trust Runtime Integrity for Autonomous AI Agents. Separating state proposal from state authorization.
               </p>

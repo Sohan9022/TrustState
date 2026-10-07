@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, ArrowRight, Lock, Zap, CheckCircle2, Terminal, ShieldAlert, Cpu, Sparkles, Presentation } from 'lucide-react';
+import { TrustStateMark } from './TrustStateLogo';
 
 export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTour, onOpenPresentation }) {
   return (
@@ -11,7 +12,8 @@ export default function HeroSection({ onOpenConsole, onSimulateAttack, onOpenTou
         <div className="text-center max-w-4xl mx-auto space-y-6">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <TrustStateMark size={16} />
+            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-mono text-[11px] tracking-wide uppercase">TrustState 2.0 Control Plane</span>
             <span className="text-emerald-300 dark:text-emerald-600">|</span>
             <span>Zero-Trust Runtime Integrity</span>

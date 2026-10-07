@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Sparkles, ShieldCheck, Zap, FlaskConical, AlertOctagon, ArrowRight, ExternalLink, BookOpen, Terminal } from 'lucide-react';
+import { TrustStateMark } from './TrustStateLogo';
 
 export default function QuickTourModal({ isOpen, onClose, onLaunchConsole, onRunNormal, onRunSandbox, onRunAttack }) {
   if (!isOpen) return null;
@@ -17,9 +18,12 @@ export default function QuickTourModal({ isOpen, onClose, onLaunchConsole, onRun
               <span className="text-slate-400 text-xs">•</span>
               <span className="text-xs text-slate-500 font-mono">30-Second PM Tour</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Evaluating TrustState in 3 Clicks
-            </h2>
+            <div className="flex items-center space-x-2.5">
+              <TrustStateMark size={24} />
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Evaluating TrustState in 3 Clicks
+              </h2>
+            </div>
           </div>
           <button
             onClick={onClose}
