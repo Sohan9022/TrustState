@@ -1,16 +1,16 @@
 import React from 'react';
 
 /**
- * TrustState Catchy Brand Logo Mark
- * Precision Cyber-Shield Monogram with Interlocking 'T' (Trust) and 'S' (State)
- * and an illuminated Central Cryptographic Lease Diamond.
+ * TrustState Aerodynamic Nexus Shield Brand Mark
+ * Crafted with continuous Bézier cyber-ribbons forming an impenetrable zero-trust
+ * shield boundary and an illuminated cryptographic state lease core.
  */
 export function TrustStateMark({ size = 32, className = "" }) {
   const uniqueId = React.useId().replace(/:/g, '');
-  const emeraldId = `ts-em-${uniqueId}`;
-  const cyanId = `ts-cy-${uniqueId}`;
-  const sparkId = `ts-spark-${uniqueId}`;
-  const glowId = `ts-glow-${uniqueId}`;
+  const emeraldId = `ts-nx-em-${uniqueId}`;
+  const cyanId = `ts-nx-cy-${uniqueId}`;
+  const glowId = `ts-nx-glow-${uniqueId}`;
+  const shadowId = `ts-nx-sh-${uniqueId}`;
 
   return (
     <svg
@@ -22,70 +22,52 @@ export function TrustStateMark({ size = 32, className = "" }) {
       className={`shrink-0 transition-transform duration-300 ${className}`}
     >
       <defs>
-        {/* Emerald gradient for the protective Trust boundary & T-Crown */}
+        {/* Vibrant Emerald Gradient (Trust & Zero-Trust Defense) */}
         <linearGradient id={emeraldId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#34D399" />
           <stop offset="50%" stopColor="#10B981" />
           <stop offset="100%" stopColor="#059669" />
         </linearGradient>
 
-        {/* Electric Cyan gradient for the dynamic State runtime ribbon */}
+        {/* Electric Cyan Gradient (Runtime State & Execution Velocity) */}
         <linearGradient id={cyanId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#38BDF8" />
           <stop offset="50%" stopColor="#0EA5E9" />
           <stop offset="100%" stopColor="#0284C7" />
         </linearGradient>
 
-        {/* Radiant core spark gradient for the cryptographic state node */}
-        <linearGradient id={sparkId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="50%" stopColor="#A7F3D0" />
-          <stop offset="100%" stopColor="#34D399" />
-        </linearGradient>
+        {/* Ambient Core Glow */}
+        <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#34D399" stopOpacity="0.45" />
+          <stop offset="100%" stopColor="#34D399" stopOpacity="0" />
+        </radialGradient>
 
-        {/* Ambient neon drop shadow */}
-        <filter id={glowId} x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#10B981" floodOpacity="0.4" />
+        {/* Specular Drop Shadow */}
+        <filter id={shadowId} x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" floodColor="#10B981" floodOpacity="0.35" />
         </filter>
       </defs>
 
-      {/* Layer 1: Outer Hex-Shield Attestation Track */}
-      <path
-        d="M32 4 L55 14 C55 14 56 32 55 36 C53 48 44 57 32 60 C20 57 11 48 9 36 C8 32 9 14 9 14 L32 4 Z"
-        stroke={`url(#${emeraldId})`}
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeOpacity="0.35"
-        strokeDasharray="4 2"
-      />
+      {/* Ambient Ethereal Glow Backdrop */}
+      <circle cx="32" cy="32" r="22" fill={`url(#${glowId})`} />
 
-      {/* Layer 2: Top Shield Crown & Downward 'T' Anchor (Trust Element) */}
+      {/* Left Defensive Wing & Top Crown (The 'Trust' Shield Anchor) */}
       <path
-        d="M32 8.5 L51 17.5 L46 23.5 L36 18.5 V30 H28 V18.5 L18 23.5 L13 17.5 L32 8.5 Z"
+        d="M32 7 C34 7 50 14.5 53 16 C54.5 16.8 55 18.5 54 20 L48 24 C47 24.8 45.5 24.5 44.5 23.8 C41 21.5 35 19 32 19 C28 19 22 21.5 19 24 C17.5 25.2 16 27.5 16 31 C16 41 24 49 32 53 C34 54 34 54 32 57 C30.5 55.5 10 44 10 30 C10 21 17 13 32 7 Z"
         fill={`url(#${emeraldId})`}
-        filter={`url(#${glowId})`}
+        filter={`url(#${shadowId})`}
       />
 
-      {/* Layer 3: Dynamic Interlocking 'S' Ribbon (State Machine & Session Loop) */}
+      {/* Right Dynamic Wing & Lower Cradle (The 'State' Runtime Foundation) */}
       <path
-        d="M50 25 C50 20.5 46.5 17 41.5 17 H34 V21.5 H41 C43 21.5 45 23 45 25 C45 27.5 43 29 40 29.5 L32 31 C26.5 32 23 36 23 41.5 C23 47.5 27.5 52 34 52 H42 V47.5 H34.5 C30 47.5 28 45 28 42 C28 39.5 30.5 37.5 34 37 L42 35.5 C47.5 34.5 50 30.5 50 25 Z"
+        d="M32 57 C30 57 14 49.5 11 48 C9.5 47.2 9 45.5 10 44 L16 40 C17 39.2 18.5 39.5 19.5 40.2 C23 42.5 29 45 32 45 C36 45 42 42.5 45 40 C46.5 38.8 48 36.5 48 33 C48 23 40 15 32 11 C30 10 30 10 32 7 C33.5 8.5 54 20 54 34 C54 43 47 51 32 57 Z"
         fill={`url(#${cyanId})`}
       />
 
-      {/* Layer 4: Lower Base Keystone */}
-      <path
-        d="M32 57.5 L24 50 L27.5 46.5 L32 50.5 L36.5 46.5 L40 50 L32 57.5 Z"
-        fill={`url(#${emeraldId})`}
-        opacity="0.9"
-      />
-
-      {/* Layer 5: Central Cryptographic Lease Diamond (Attestation Spark) */}
-      <polygon
-        points="32,26 36.5,31 32,36 27.5,31"
-        fill={`url(#${sparkId})`}
-      />
-      <circle cx="32" cy="31" r="1.3" fill="#047857" />
+      {/* Central Verified Cryptographic Diamond Lease Node */}
+      <polygon points="32,23 40,32 32,41 24,32" fill="#FFFFFF" />
+      <circle cx="32" cy="32" r="3.2" fill="#10B981" />
+      <circle cx="32" cy="32" r="1.3" fill="#FFFFFF" />
     </svg>
   );
 }
@@ -94,7 +76,7 @@ export function TrustStateMark({ size = 32, className = "" }) {
  * Full Brand Lockup with Catchy Logo Mark + Wordmark + Version Badge
  */
 export default function TrustStateLogo({
-  size = 32,
+  size = 30,
   showText = true,
   showBadge = true,
   badgeText = "v2.0",
