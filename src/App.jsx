@@ -80,6 +80,8 @@ export default function App() {
       return a;
     }));
 
+    setViewMode('console');
+    setActiveTab('overview');
     showToast(`Committed State Verified: Tool executed in ${lat}ms (State Lease Minted)`, 'success');
   };
 
@@ -101,6 +103,8 @@ export default function App() {
     };
 
     setActionsStream(prev => [blockedAction, ...prev.slice(0, 19)]);
+    setViewMode('console');
+    setActiveTab('overview');
     showToast(`SANDBOX MODE (§11): Privileged tool blocked. "Experiment freely, commit carefully."`, 'info');
   };
 

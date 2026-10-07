@@ -64,6 +64,7 @@ export default function QuickTourModal({ isOpen, onClose, onLaunchConsole, onRun
                     </span>
                     <button
                       onClick={() => {
+                        onLaunchConsole();
                         onRunNormal();
                         onClose();
                       }}
@@ -90,6 +91,7 @@ export default function QuickTourModal({ isOpen, onClose, onLaunchConsole, onRun
                     </span>
                     <button
                       onClick={() => {
+                        onLaunchConsole();
                         onRunSandbox();
                         onClose();
                       }}
