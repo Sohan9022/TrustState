@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
+import HeroSection from './components/HeroSection';
+import ArchitectureDiagram from './components/ArchitectureDiagram';
+import SecurityPillars from './components/SecurityPillars';
 import SimulationBar from './components/SimulationBar';
 import FleetOverview from './components/FleetOverview';
 import AgentDetail from './components/AgentDetail';
@@ -7,10 +10,11 @@ import StateTimeline from './components/StateTimeline';
 import TransitionReview from './components/TransitionReview';
 import IncidentResponse from './components/IncidentResponse';
 import { INITIAL_AGENTS, INITIAL_ACTIONS_STREAM, INITIAL_PENDING_PROPOSALS } from './data/initialState';
-import { ShieldCheck, ShieldAlert, X } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, X, ArrowRight, Terminal } from 'lucide-react';
 
 export default function App() {
-  const [theme, setTheme] = useState('light'); // Default to light/clean modern theme, not gloomy dark!
+  const [theme, setTheme] = useState('light'); // Default to crisp, modern Light Mode!
+  const [viewMode, setViewMode] = useState('landing'); // 'landing' | 'console'
   const [activeTab, setActiveTab] = useState('overview');
   const [agents, setAgents] = useState(INITIAL_AGENTS);
   const [selectedAgentId, setSelectedAgentId] = useState('finance-agent-01');
@@ -19,7 +23,7 @@ export default function App() {
   const [incidents, setIncidents] = useState([]);
   const [toast, setToast] = useState(null);
 
-  // Sync theme with document class
+  // Synchronize theme with HTML document element
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -79,7 +83,6 @@ export default function App() {
   const handleSimulateSandboxAction = () => {
     const sandboxAgent = agents.find(a => a.executionMode === 'SANDBOX') || agents[1];
     
-    // Simulate attempt to call privileged tool while in sandbox
     const blockedAction = {
       id: `act-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toLocaleTimeString(),
@@ -177,7 +180,7 @@ export default function App() {
     showToast("Rollback complete: Safe checkpoint S101 restored and verified.", "success");
   };
 
-  // 5. Toggle Sandbox Mode on Agent (§11 of Concept)
+  // 5. Toggle Sandbox Mode
   const handleToggleSandbox = (agentId, mode) => {
     setAgents(prev => prev.map(a => {
       if (a.id === agentId) {
@@ -193,7 +196,7 @@ export default function App() {
     showToast(`Execution mode updated to ${mode} for agent.`, 'info');
   };
 
-  // 6. Promote Sandbox State to Review Queue
+  // 6. Promote Sandbox State
   const handlePromoteSandbox = (agentId) => {
     const ag = agents.find(a => a.id === agentId);
     const newProposal = {
@@ -221,6 +224,7 @@ export default function App() {
     };
 
     setPendingProposals(prev => [newProposal, ...prev]);
+    setViewMode('console');
     setActiveTab('review');
     showToast(`Sandbox state promoted to Review Queue as candidate S102-promoted!`, 'success');
   };
@@ -302,11 +306,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-slate-200 dark:selection:bg-slate-800">
-      {/* Toast Notification */}
+    <div className="min-h-screen bg-white dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-emerald-500/20">
+      {/* Toast Alert Notification */}
       {toast && (
-        <div className="fixed top-20 right-6 z-50 transition-all">
-          <div className={`p-3.5 rounded-xl shadow-xl border flex items-center space-x-2.5 text-xs font-semibold ${
+        <div className="fixed top-20 right-6 z-50 transition-all animate-bounce">
+          <div className={`p-3.5 rounded-xl shadow-2xl border flex items-center space-x-2.5 text-xs font-semibold ${
             toast.type === 'error'
               ? 'bg-rose-50 text-rose-900 border-rose-300 dark:bg-rose-950/90 dark:text-rose-200 dark:border-rose-800'
               : toast.type === 'info'
@@ -322,8 +326,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Navigation */}
+      {/* Main Top Navigation */}
       <Navbar
+        viewMode={viewMode}
+        setViewMode={setViewMode}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         agents={agents}
@@ -333,55 +339,116 @@ export default function App() {
         onToggleTheme={toggleTheme}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'overview' && (
-          <FleetOverview
-            agents={agents}
-            actionsStream={actionsStream}
-            onSelectAgent={(id) => {
-              setSelectedAgentId(id);
-              setActiveTab('agent');
-            }}
-            onNavigateTab={setActiveTab}
+      {/* VIEW 1: TOP-TIER CYBERSECURITY COMPANY HOMEPAGE */}
+      {viewMode === 'landing' && (
+        <main className="flex-1">
+          {/* Hero Section */}
+          <HeroSection
+            onOpenConsole={() => setViewMode('console')}
+            onSimulateAttack={handleSimulateAttack}
           />
-        )}
 
-        {activeTab === 'agent' && (
-          <AgentDetail
-            agent={selectedAgent}
-            onSelectAgent={setSelectedAgentId}
-            allAgents={agents}
-            onToggleSandbox={handleToggleSandbox}
-            onPromoteSandbox={handlePromoteSandbox}
+          {/* Architecture Visualizer Section */}
+          <ArchitectureDiagram
+            onOpenConsole={() => setViewMode('console')}
           />
-        )}
 
-        {activeTab === 'timeline' && (
-          <StateTimeline
-            agent={selectedAgent}
-            isAttacked={isFinanceAttacked && selectedAgent.id === 'finance-agent-01'}
-          />
-        )}
+          {/* Core Product Pillars (Bento Grid) */}
+          <SecurityPillars />
 
-        {activeTab === 'review' && (
-          <TransitionReview
-            proposals={pendingProposals}
-            onApproveProposal={handleApproveProposal}
-            onRejectProposal={handleRejectProposal}
-            onSimulateNewProposal={handleSimulateNewProposal}
-          />
-        )}
+          {/* Embedded SecOps Console Preview Section */}
+          <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-3">
+              <div>
+                <span className="text-xs font-mono font-bold tracking-wider uppercase text-emerald-600 dark:text-emerald-400">
+                  Live Product Demonstration
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
+                  Interactive SecOps Management Console
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Inspect active agent states, simulate prompt injection attacks, and test circuit breaker recovery live.
+                </p>
+              </div>
 
-        {activeTab === 'incident' && (
-          <IncidentResponse
-            incidents={incidents}
-            onRollbackAgent={handleRollbackAgent}
-          />
-        )}
-      </main>
+              <button
+                onClick={() => setViewMode('console')}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all flex items-center space-x-1.5 w-fit"
+              >
+                <span>Full Screen Console</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-      {/* Floating Interactive Control Dock */}
+            {/* Embedded Console Component */}
+            <FleetOverview
+              agents={agents}
+              actionsStream={actionsStream}
+              onSelectAgent={(id) => {
+                setSelectedAgentId(id);
+                setViewMode('console');
+                setActiveTab('agent');
+              }}
+              onNavigateTab={(tab) => {
+                setViewMode('console');
+                setActiveTab(tab);
+              }}
+            />
+          </section>
+        </main>
+      )}
+
+      {/* VIEW 2: FULL SECOPS CONSOLE APPLICATION */}
+      {viewMode === 'console' && (
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {activeTab === 'overview' && (
+            <FleetOverview
+              agents={agents}
+              actionsStream={actionsStream}
+              onSelectAgent={(id) => {
+                setSelectedAgentId(id);
+                setActiveTab('agent');
+              }}
+              onNavigateTab={setActiveTab}
+            />
+          )}
+
+          {activeTab === 'agent' && (
+            <AgentDetail
+              agent={selectedAgent}
+              onSelectAgent={setSelectedAgentId}
+              allAgents={agents}
+              onToggleSandbox={handleToggleSandbox}
+              onPromoteSandbox={handlePromoteSandbox}
+            />
+          )}
+
+          {activeTab === 'timeline' && (
+            <StateTimeline
+              agent={selectedAgent}
+              isAttacked={isFinanceAttacked && selectedAgent.id === 'finance-agent-01'}
+            />
+          )}
+
+          {activeTab === 'review' && (
+            <TransitionReview
+              proposals={pendingProposals}
+              onApproveProposal={handleApproveProposal}
+              onRejectProposal={handleRejectProposal}
+              onSimulateNewProposal={handleSimulateNewProposal}
+            />
+          )}
+
+          {activeTab === 'incident' && (
+            <IncidentResponse
+              incidents={incidents}
+              onRollbackAgent={handleRollbackAgent}
+            />
+          )}
+        </main>
+      )}
+
+      {/* Floating Interactive Simulator Dock (Always accessible!) */}
       <SimulationBar
         onSimulateAction={handleSimulateAction}
         onSimulateSandboxAction={handleSimulateSandboxAction}
@@ -392,19 +459,40 @@ export default function App() {
         isSandboxMode={isSelectedInSandbox}
       />
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-[#0B1120]/60 py-5 text-xs text-slate-500 dark:text-slate-400 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center space-x-2">
-            <span className="font-bold text-slate-800 dark:text-slate-200">TrustState</span>
-            <span>— Zero-Trust Runtime Integrity Control Plane</span>
+      {/* Enterprise Footer */}
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#070B14] py-12 text-xs text-slate-500 dark:text-slate-400 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="font-extrabold text-slate-900 dark:text-white text-sm">TrustState</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-semibold">
+                  v2.0
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
+                Zero-Trust Runtime Integrity for Autonomous AI Agents. Separating state proposal from state authorization.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 text-xs font-medium">
+              <a href="https://github.com/Sohan9022/TrustState/blob/main/PRD.md" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
+                PRD Specification (v2.0)
+              </a>
+              <span>•</span>
+              <a href="https://github.com/Sohan9022/TrustState/blob/main/INTERVIEW_PLAYBOOK.md" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
+                Interview Playbook
+              </a>
+              <span>•</span>
+              <a href="https://github.com/Sohan9022/TrustState" target="_blank" rel="noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 transition-colors">
+                GitHub Repository
+              </a>
+            </div>
           </div>
-          <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-400">
-            <span>RFC 8785 Canonical State Hashing</span>
-            <span>•</span>
-            <span>Sub-15ms Local Redis Cache</span>
-            <span>•</span>
-            <span>Experiment Freely, Commit Carefully</span>
+
+          <div className="pt-6 border-t border-slate-200 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+            <span>RFC 8785 Canonical JSON Hashing · Sub-15ms Local Redis Cache · Model Context Protocol (MCP)</span>
+            <span>0→1 Product Management & AI Systems Architecture</span>
           </div>
         </div>
       </footer>
