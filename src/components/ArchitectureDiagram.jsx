@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Lock, ArrowRight, Database, Server, Key, Terminal, Cpu } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Lock, ArrowRight, Database, Server, Key, Terminal, Cpu, CheckCircle2 } from 'lucide-react';
 
 export default function ArchitectureDiagram({ onOpenConsole }) {
   return (
