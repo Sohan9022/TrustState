@@ -7,7 +7,7 @@ import StateTimeline from './components/StateTimeline';
 import TransitionReview from './components/TransitionReview';
 import IncidentResponse from './components/IncidentResponse';
 import { INITIAL_AGENTS, INITIAL_ACTIONS_STREAM, INITIAL_PENDING_PROPOSALS } from './data/initialState';
-import { ShieldCheck, ShieldAlert, CheckCircle2, AlertTriangle, X } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, X } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -25,7 +25,7 @@ export default function App() {
     setToast({ message, type });
     setTimeout(() => {
       setToast(null);
-    }, 4500);
+    }, 4000);
   };
 
   // 1. Simulate Normal Verified Action
@@ -63,7 +63,6 @@ export default function App() {
   const handleSimulateAttack = () => {
     const tamperedHash = "x938e21a78dc1b092afef4b10996fa1127ae82f4649a112ca495112b7852c001";
     
-    // Quarantine agent
     setAgents(prev => prev.map(a => {
       if (a.id === 'finance-agent-01') {
         return {
@@ -77,7 +76,6 @@ export default function App() {
       return a;
     }));
 
-    // Add blocked action to stream
     const blockedAction = {
       id: `act-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toLocaleTimeString(),
@@ -92,7 +90,6 @@ export default function App() {
     };
     setActionsStream(prev => [blockedAction, ...prev.slice(0, 19)]);
 
-    // Add new incident
     const newIncident = {
       id: `INC-2026-081`,
       agentId: "finance-agent-01",
@@ -106,7 +103,7 @@ export default function App() {
     };
     setIncidents([newIncident]);
 
-    showToast("CIRCUIT BREAKER TRIPPED: Cryptographic mismatch on Finance-Agent-01. Quarantined!", "error");
+    showToast("Circuit Breaker Tripped: State mismatch on Finance-Agent-01. Quarantined.", "error");
   };
 
   // 3. Rollback & Recover Agent
@@ -124,7 +121,6 @@ export default function App() {
       return a;
     }));
 
-    // Add recovery action to stream
     const recoveryAction = {
       id: `act-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toLocaleTimeString(),
@@ -140,7 +136,7 @@ export default function App() {
     setActionsStream(prev => [recoveryAction, ...prev.slice(0, 19)]);
     setIncidents([]);
 
-    showToast("Rollback complete! Safe checkpoint S101 restored and verified.", "success");
+    showToast("Rollback complete: Safe checkpoint S101 restored and verified.", "success");
   };
 
   // 4. Approve Pending Proposal
@@ -171,7 +167,7 @@ export default function App() {
     }));
 
     setPendingProposals(prev => prev.filter(p => p.id !== proposalId));
-    showToast(`State ${prop.proposedStateId} authorized & committed! New hash: ${newHash.substring(0, 12)}...`, 'success');
+    showToast(`State ${prop.proposedStateId} authorized & committed.`, 'success');
   };
 
   // 5. Reject Proposal
@@ -186,25 +182,25 @@ export default function App() {
     setActionsStream(INITIAL_ACTIONS_STREAM);
     setPendingProposals(INITIAL_PENDING_PROPOSALS);
     setIncidents([]);
-    showToast("Simulation environment reset to initial state.", "info");
+    showToast("Demo environment reset to initial baseline.", "info");
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col font-sans selection:bg-zinc-800">
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 animate-bounce">
-          <div className={`p-4 rounded-xl shadow-2xl border flex items-center space-x-3 text-xs font-semibold ${
+        <div className="fixed top-20 right-6 z-50 transition-all">
+          <div className={`p-3.5 rounded-lg shadow-xl border flex items-center space-x-2.5 text-xs font-medium ${
             toast.type === 'error'
-              ? 'bg-rose-950 text-rose-200 border-rose-700 shadow-rose-950/50'
+              ? 'bg-rose-950/90 text-rose-200 border-rose-800'
               : toast.type === 'info'
-              ? 'bg-slate-800 text-slate-200 border-slate-700'
-              : 'bg-emerald-950 text-emerald-200 border-emerald-700 shadow-emerald-950/50'
+              ? 'bg-zinc-900 text-zinc-200 border-zinc-700'
+              : 'bg-zinc-900 text-emerald-300 border-zinc-700'
           }`}>
-            {toast.type === 'error' ? <ShieldAlert className="w-5 h-5 text-rose-400" /> : <ShieldCheck className="w-5 h-5 text-emerald-400" />}
+            {toast.type === 'error' ? <ShieldAlert className="w-4 h-4 text-rose-400" /> : <ShieldCheck className="w-4 h-4 text-emerald-400" />}
             <span>{toast.message}</span>
-            <button onClick={() => setToast(null)} className="ml-2 hover:opacity-80">
-              <X className="w-4 h-4" />
+            <button onClick={() => setToast(null)} className="ml-2 text-zinc-400 hover:text-white">
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -217,15 +213,6 @@ export default function App() {
         agents={agents}
         pendingCount={pendingProposals.length}
         incidentCount={incidents.length}
-      />
-
-      {/* Interactive Simulation Sandbox Bar */}
-      <SimulationBar
-        onSimulateAction={handleSimulateAction}
-        onSimulateAttack={handleSimulateAttack}
-        onRollback={() => handleRollbackAgent('finance-agent-01')}
-        onReset={handleReset}
-        isAttacked={isFinanceAttacked}
       />
 
       {/* Main Screen Content */}
@@ -273,21 +260,26 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#0B0F19] py-4 text-xs text-slate-500">
+      {/* Floating Interactive Control Dock */}
+      <SimulationBar
+        onSimulateAction={handleSimulateAction}
+        onSimulateAttack={handleSimulateAttack}
+        onRollback={() => handleRollbackAgent('finance-agent-01')}
+        onReset={handleReset}
+        isAttacked={isFinanceAttacked}
+      />
+
+      {/* Minimalist Footer */}
+      <footer className="border-t border-zinc-800/60 bg-zinc-950/40 py-5 text-xs text-zinc-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
-            <span className="font-mono text-cyan-400 font-semibold">TrustState</span>
-            <span>— Zero-Trust Runtime Integrity for Autonomous AI Agents</span>
+            <span className="font-semibold text-zinc-300">TrustState</span>
+            <span>— Zero-Trust Runtime Integrity Control Plane</span>
           </div>
-          <div className="flex items-center space-x-4">
-            <a href="file:///c:/Users/sohan/Downloads/TrustState/PRD.md" target="_blank" rel="noreferrer" className="hover:text-cyan-400 transition-colors">
-              PRD Specification v2.0
-            </a>
+          <div className="flex items-center space-x-3 text-zinc-400">
+            <span>RFC 8785 Canonical State Hashing</span>
             <span>•</span>
-            <span>RFC 8785 Canonical JSON Hashing</span>
-            <span>•</span>
-            <span>P95 &lt; 25ms SLA</span>
+            <span>Sub-15ms Cached Verification</span>
           </div>
         </div>
       </footer>

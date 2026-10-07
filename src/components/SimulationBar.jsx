@@ -1,77 +1,63 @@
-import React from 'react';
-import { Play, Zap, AlertOctagon, RotateCcw, ShieldCheck, Terminal } from 'lucide-react';
+import React, { useState } from 'react';
+import { Zap, AlertOctagon, RotateCcw, RotateCw, ChevronUp, ChevronDown, Terminal } from 'lucide-react';
 
 export default function SimulationBar({ onSimulateAction, onSimulateAttack, onRollback, onReset, isAttacked }) {
+  const [isExpanded, setIsExpanded] = useState(true);
+
   return (
-    <div className="bg-slate-900/90 border-b border-slate-800 py-3 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center space-x-2">
-          <div className="p-1.5 rounded-lg bg-cyan-950/70 border border-cyan-800/60 text-cyan-400">
-            <Terminal className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center space-x-2">
-              <span>Interactive Control Sandbox</span>
-              <span className="text-[10px] font-normal px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">
-                0→1 PM Demo Mode
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              Test runtime integrity, prompt injection prevention, and automated recovery live:
-            </p>
-          </div>
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 transition-all">
+      <div className="bg-zinc-900/90 backdrop-blur-md border border-zinc-700/80 rounded-xl shadow-2xl p-2 flex items-center space-x-2 text-xs">
+        {/* Label */}
+        <div className="flex items-center space-x-2 px-2.5 py-1 text-zinc-400 font-mono text-[11px] border-r border-zinc-800">
+          <Terminal className="w-3.5 h-3.5 text-zinc-400" />
+          <span className="font-semibold text-zinc-200">Interactive Demo</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Button 1: Legitimate verification */}
-          <button
-            onClick={onSimulateAction}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/80 hover:bg-emerald-900/90 text-emerald-300 border border-emerald-700/60 transition-all shadow-sm active:scale-95"
-            title="Agent requests privileged tool. Hash matches, lease token issued in ~11ms."
-          >
-            <Zap className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Simulate Verified Action</span>
-          </button>
+        {/* Action 1: Legitimate Action */}
+        <button
+          onClick={onSimulateAction}
+          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-200 font-medium border border-zinc-700 transition-all active:scale-95"
+          title="Agent calls privileged tool. Hash matches, lease token issued in ~11ms."
+        >
+          <Zap className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Test Normal Call</span>
+        </button>
 
-          {/* Button 2: Prompt injection attack */}
-          <button
-            onClick={onSimulateAttack}
-            disabled={isAttacked}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm active:scale-95 ${
-              isAttacked
-                ? 'bg-slate-800/60 text-slate-500 border border-slate-700/40 cursor-not-allowed'
-                : 'bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-700 shadow-rose-900/20 animate-pulse'
-            }`}
-            title="Inject malicious instruction into agent context. Cryptographic state mismatch trips circuit breaker."
-          >
-            <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
-            <span>{isAttacked ? 'Agent Already Quarantined' : 'Simulate Prompt Injection Attack'}</span>
-          </button>
+        {/* Action 2: Prompt Injection Attack */}
+        <button
+          onClick={onSimulateAttack}
+          disabled={isAttacked}
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium transition-all active:scale-95 ${
+            isAttacked
+              ? 'bg-zinc-800/40 text-zinc-600 border border-zinc-800 cursor-not-allowed'
+              : 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30'
+          }`}
+          title="Simulate indirect prompt injection: agent attempts unauthorized mutation, hash mismatch trips circuit breaker."
+        >
+          <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
+          <span>{isAttacked ? 'Agent Quarantined' : 'Simulate Injection Attack'}</span>
+        </button>
 
-          {/* Button 3: Rollback & Recovery */}
+        {/* Action 3: Rollback */}
+        {isAttacked && (
           <button
             onClick={onRollback}
-            disabled={!isAttacked}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm active:scale-95 ${
-              !isAttacked
-                ? 'bg-slate-800/40 text-slate-600 border border-slate-800 cursor-not-allowed'
-                : 'bg-cyan-950/90 hover:bg-cyan-900 text-cyan-200 border border-cyan-600 shadow-cyan-900/20'
-            }`}
-            title="Roll back to previous trusted PES checkpoint S101 and restore execution."
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-medium transition-all active:scale-95 animate-pulse"
+            title="Roll back to previous safe checkpoint S101"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
-            <span>1-Click Rollback & Recover</span>
+            <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
+            <span>1-Click Rollback</span>
           </button>
+        )}
 
-          {/* Button 4: Reset */}
-          <button
-            onClick={onReset}
-            className="px-2.5 py-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all"
-            title="Reset simulation to initial state"
-          >
-            Reset
-          </button>
-        </div>
+        {/* Reset */}
+        <button
+          onClick={onReset}
+          className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+          title="Reset Demo Data"
+        >
+          <RotateCw className="w-3.5 h-3.5" />
+        </button>
       </div>
     </div>
   );

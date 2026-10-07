@@ -1,146 +1,117 @@
 import React from 'react';
-import { ShieldAlert, RotateCcw, Download, CheckCircle2, AlertOctagon, Terminal, FileCode, CheckCircle } from 'lucide-react';
+import { ShieldAlert, RotateCcw, Download, CheckCircle2, CheckCircle, Terminal } from 'lucide-react';
 
 export default function IncidentResponse({ incidents, onRollbackAgent }) {
   if (incidents.length === 0) {
     return (
-      <div className="p-12 text-center rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-        <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
-        <h3 className="text-base font-semibold text-white">No Active Security Incidents</h3>
-        <p className="text-xs text-slate-400 max-w-md mx-auto">
-          All autonomous agents are operating within verified cryptographic boundaries. You can use the top control bar to simulate a prompt injection attack and observe runtime quarantine.
+      <div className="p-12 text-center rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
+        <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto" />
+        <h3 className="text-sm font-semibold text-white">No Active Security Incidents</h3>
+        <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+          All autonomous agents are operating within verified cryptographic boundaries.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="p-6 rounded-xl bg-rose-950/40 border border-rose-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start space-x-3">
-          <div className="p-2.5 rounded-xl bg-rose-900/80 text-rose-200 border border-rose-700">
-            <ShieldAlert className="w-6 h-6 text-rose-300" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <h2 className="text-lg font-bold text-white font-mono">
-                Active Incident Forensics & Quarantine
-              </h2>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-600 text-white uppercase tracking-wider">
-                SEV-1 CRITICAL
-              </span>
-            </div>
-            <p className="text-xs text-rose-200/80 mt-1">
-              Zero-Trust Circuit Breaker engaged. Consequential tool execution halted for affected agents.
-            </p>
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 className="text-lg font-semibold text-white tracking-tight">Active Incident Forensics</h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Circuit breaker containment and root-cause analysis for quarantined agents.
+          </p>
         </div>
-
-        <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-rose-900/60 text-rose-300 border border-rose-700/60 shrink-0">
-          {incidents.length} Quarantined Agent(s)
+        <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20 font-mono w-fit">
+          SEV-1 Critical Incident
         </span>
       </div>
 
       {/* Incident Cards */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         {incidents.map((incident) => (
-          <div key={incident.id} className="p-6 rounded-xl bg-slate-900/90 border border-slate-800 space-y-6 shadow-lg">
-            {/* Incident Title & Metadata */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-2">
+          <div key={incident.id} className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-5">
+            {/* Top metadata */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-zinc-800/60 text-xs gap-1">
               <div>
-                <span className="text-xs font-mono text-rose-400 font-semibold">{incident.id}</span>
-                <h3 className="text-base font-bold text-white font-mono mt-0.5">
-                  Target: {incident.agentName}
-                </h3>
+                <span className="font-mono text-rose-400 font-semibold">{incident.id}</span>
+                <span className="text-zinc-500 mx-2">|</span>
+                <span className="font-mono text-white font-medium">{incident.agentName}</span>
               </div>
-              <div className="text-xs text-slate-400 font-mono">
-                Detected: <span className="text-slate-200">{incident.detectedAt}</span>
-              </div>
+              <span className="text-zinc-500 text-[11px] font-mono">Detected: {incident.detectedAt}</span>
             </div>
 
             {/* Forensic Hash Comparison */}
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center space-x-2">
-                <Terminal className="w-4 h-4 text-cyan-400" />
-                <span>Cryptographic State Attestation Failure</span>
-              </h4>
+              <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400 block mb-2">
+                Cryptographic State Attestation Mismatch
+              </span>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Expected Hash */}
-                <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 uppercase font-mono">Expected State Hash (H101)</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
-                      AUTHORITATIVE
-                    </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                {/* Expected */}
+                <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-zinc-400">Expected Hash ({incident.expectedStateId})</span>
+                    <span className="text-emerald-400 font-mono text-[10px]">AUTHORITATIVE</span>
                   </div>
-                  <div className="font-mono text-xs text-emerald-400 break-all bg-slate-900/60 p-2 rounded border border-slate-800">
+                  <div className="font-mono text-[11px] text-emerald-400 break-all bg-zinc-900/60 p-2 rounded border border-zinc-800">
                     {incident.expectedHash}
-                  </div>
-                  <div className="text-[11px] text-slate-400">
-                    Baseline: State <span className="font-mono text-slate-200">{incident.expectedStateId}</span>
                   </div>
                 </div>
 
-                {/* Observed Hash */}
-                <div className="p-4 rounded-lg bg-rose-950/30 border border-rose-900/60 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-rose-300 uppercase font-mono">Observed State Hash (Tampered)</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-900 text-rose-200 border border-rose-700 font-mono animate-pulse">
-                      INTEGRITY VIOLATION
-                    </span>
+                {/* Observed */}
+                <div className="p-3 rounded-lg bg-zinc-950 border border-rose-900/40 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-rose-300">Observed Hash (Runtime)</span>
+                    <span className="text-rose-400 font-mono text-[10px]">MISMATCH</span>
                   </div>
-                  <div className="font-mono text-xs text-rose-300 break-all bg-rose-950/60 p-2 rounded border border-rose-900">
+                  <div className="font-mono text-[11px] text-rose-300 break-all bg-rose-500/10 p-2 rounded border border-rose-900/60">
                     {incident.observedHash}
-                  </div>
-                  <div className="text-[11px] text-rose-300/80">
-                    Computed from runtime environment prior to tool call
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Attack Vector & Analysis */}
-            <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                Threat Vector Analysis
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
+            {/* Threat Vector Analysis */}
+            <div className="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1.5 text-xs">
+              <span className="text-zinc-400 font-medium text-[11px] block">Threat Vector Analysis</span>
+              <p className="text-zinc-300 text-[11px] leading-relaxed">
                 {incident.threatAnalysis}
               </p>
-              <div className="mt-2 text-xs font-mono text-amber-400 bg-amber-950/30 p-2 rounded border border-amber-900/50">
-                Blocked Tool Call: <code>{incident.blockedTool}</code>
+              <div className="text-zinc-400 text-[11px] font-mono pt-1">
+                Blocked Tool: <code className="text-rose-400">{incident.blockedTool}</code>
               </div>
             </div>
 
             {/* Automated Containment Protocol */}
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400 block mb-2">
                 Automated Containment Protocol Executed
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2.5 rounded bg-slate-950 border border-slate-800 flex items-center space-x-2 text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Privileged Tool Gate: FROZEN</span>
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                <div className="p-2 rounded bg-zinc-950 border border-zinc-800 flex items-center space-x-2 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>Tool Gateway: FROZEN</span>
                 </div>
-                <div className="p-2.5 rounded bg-slate-950 border border-slate-800 flex items-center space-x-2 text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>State Lease Token: REVOKED</span>
+                <div className="p-2 rounded bg-zinc-950 border border-zinc-800 flex items-center space-x-2 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>State Lease: REVOKED</span>
                 </div>
-                <div className="p-2.5 rounded bg-slate-950 border border-slate-800 flex items-center space-x-2 text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Agent Process: QUARANTINED</span>
+                <div className="p-2 rounded bg-zinc-950 border border-zinc-800 flex items-center space-x-2 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>Process: QUARANTINED</span>
                 </div>
-                <div className="p-2.5 rounded bg-slate-950 border border-slate-800 flex items-center space-x-2 text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Immutable Audit Log: WRITTEN</span>
+                <div className="p-2 rounded bg-zinc-950 border border-zinc-800 flex items-center space-x-2 text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>Audit Event: PERSISTED</span>
                 </div>
               </div>
             </div>
 
-            {/* Remediation Action Controls */}
-            <div className="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            {/* Actions */}
+            <div className="pt-2 border-t border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
               <button
                 onClick={() => {
                   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(incident, null, 2));
@@ -151,18 +122,18 @@ export default function IncidentResponse({ incidents, onRollbackAgent }) {
                   downloadAnchor.click();
                   downloadAnchor.remove();
                 }}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center justify-center space-x-1.5"
+                className="w-full sm:w-auto px-3.5 py-2 rounded-lg font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors flex items-center justify-center space-x-1.5"
               >
-                <Download className="w-4 h-4 text-cyan-400" />
-                <span>Export Forensic Evidence Bundle (JSON)</span>
+                <Download className="w-3.5 h-3.5" />
+                <span>Export Forensic Evidence (JSON)</span>
               </button>
 
               <button
                 onClick={() => onRollbackAgent(incident.agentId)}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 border border-emerald-400/40 transition-all flex items-center justify-center space-x-1.5"
+                className="w-full sm:w-auto px-4 py-2 rounded-lg font-medium bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition-colors flex items-center justify-center space-x-1.5"
               >
-                <RotateCcw className="w-4 h-4 text-emerald-100" />
-                <span>Rollback to Last Safe Checkpoint ({incident.expectedStateId}) & Restore</span>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Rollback to {incident.expectedStateId} & Restore</span>
               </button>
             </div>
           </div>

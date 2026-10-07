@@ -1,135 +1,104 @@
 import React from 'react';
-import { Shield, ShieldAlert, Cpu, Activity, Clock, Layers, GitBranch, AlertTriangle } from 'lucide-react';
+import { Shield, Activity, Clock, AlertTriangle, Layers, GitBranch, UserCheck, ShieldAlert } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, agents, pendingCount, incidentCount }) {
   const trustedCount = agents.filter(a => a.status === 'TRUSTED').length;
   const quarantinedCount = agents.filter(a => a.status === 'QUARANTINED').length;
 
+  const navItems = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'agent', label: 'Agent State' },
+    { id: 'timeline', label: 'Timeline & Diff' },
+    { id: 'review', label: 'State Approvals', count: pendingCount, countColor: 'amber' },
+    { id: 'incident', label: 'Incidents', count: incidentCount, countColor: 'rose' },
+  ];
+
   return (
-    <header className="border-b border-slate-800 bg-[#0c121e]/90 backdrop-blur-md sticky top-0 z-50">
-      {/* Top status bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between border-b border-slate-800/60 text-xs">
-        <div className="flex items-center space-x-6 text-slate-400">
-          <div className="flex items-center space-x-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="font-medium text-slate-200">TrustState Gateway: ACTIVE</span>
-          </div>
-          <div className="hidden sm:flex items-center space-x-1">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
-            <span>P95 Verification Latency:</span>
-            <span className="font-mono text-cyan-300 font-semibold">12.2 ms</span>
-          </div>
-          <div className="hidden md:flex items-center space-x-1">
-            <Activity className="w-3.5 h-3.5 text-slate-400" />
-            <span>MCP Proxy:</span>
-            <span className="text-slate-300 font-mono">ENFORCING</span>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="text-slate-400">Fleet Trust:</span>
-            <span className="px-2 py-0.5 rounded-full font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              {trustedCount}/{agents.length} Trusted
-            </span>
-            {quarantinedCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse">
-                {quarantinedCount} Quarantined
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Main navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('overview')}>
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/30">
-            <Shield className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-lg tracking-tight text-white font-mono">TrustState</span>
-              <span className="px-1.5 py-0.2 rounded text-[10px] font-mono uppercase tracking-wider bg-cyan-950 text-cyan-300 border border-cyan-800">
-                v2.0 Runtime
-              </span>
+    <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo & Brand */}
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('overview')}>
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700/80 flex items-center justify-center text-zinc-100 shadow-sm">
+              <Shield className="w-4 h-4 text-emerald-400" />
             </div>
-            <p className="text-[11px] text-slate-400 leading-none">Zero-Trust Runtime Integrity for AI Agents</p>
-          </div>
-        </div>
-
-        <nav className="flex space-x-1 sm:space-x-2">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-              activeTab === 'overview'
-                ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-          >
-            Overview
-          </button>
-
-          <button
-            onClick={() => setActiveTab('agent')}
-            className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-              activeTab === 'agent'
-                ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-          >
-            Agent Trust Detail
-          </button>
-
-          <button
-            onClick={() => setActiveTab('timeline')}
-            className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-              activeTab === 'timeline'
-                ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-          >
-            State Timeline & Diff
-          </button>
-
-          <button
-            onClick={() => setActiveTab('review')}
-            className={`relative px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-              activeTab === 'review'
-                ? 'bg-slate-800 text-cyan-300 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-          >
-            <span>Transition Review</span>
-            {pendingCount > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                {pendingCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setActiveTab('incident')}
-            className={`relative px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-              activeTab === 'incident'
-                ? 'bg-rose-950/40 text-rose-300 border border-rose-800/50 shadow-sm'
-                : 'text-slate-400 hover:text-rose-300 hover:bg-slate-800/40'
-            }`}
-          >
-            <div className="flex items-center space-x-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-              <span>Incidents</span>
-              {incidentCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-rose-500/30 text-rose-200 border border-rose-500/40">
-                  {incidentCount}
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="font-semibold text-sm tracking-tight text-white">TrustState</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
+                  v2.0
                 </span>
-              )}
+              </div>
             </div>
-          </button>
-        </nav>
+          </div>
+
+          {/* Centered Minimalist Navigation Tabs */}
+          <nav className="hidden md:flex items-center space-x-1 p-1 bg-zinc-900/60 rounded-lg border border-zinc-800/80">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`relative px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center space-x-1.5 ${
+                    isActive
+                      ? 'bg-zinc-800 text-white shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {item.count > 0 && (
+                    <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium ${
+                      item.countColor === 'rose'
+                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    }`}>
+                      {item.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* System Telemetry Badges */}
+          <div className="flex items-center space-x-3 text-xs">
+            <div className="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-md bg-zinc-900/80 border border-zinc-800/80 text-zinc-400 font-mono text-[11px]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="text-zinc-300">P95: 12.4ms</span>
+              <span className="text-zinc-600">|</span>
+              <span className="text-zinc-300">{trustedCount}/{agents.length} Trusted</span>
+            </div>
+
+            {quarantinedCount > 0 && (
+              <button
+                onClick={() => setActiveTab('incident')}
+                className="flex items-center space-x-1 px-2.5 py-1 rounded-md bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium hover:bg-rose-500/20 transition-colors"
+              >
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+                <span>1 Quarantined</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Navigation Tabs */}
+        <div className="md:hidden flex items-center space-x-1 overflow-x-auto py-2 border-t border-zinc-800/60">
+          {navItems.map((item) => {
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`px-3 py-1 rounded-md text-xs font-medium shrink-0 ${
+                  isActive ? 'bg-zinc-800 text-white' : 'text-zinc-400'
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </header>
   );

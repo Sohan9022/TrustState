@@ -1,36 +1,30 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, AlertTriangle, CheckCircle, XCircle, ArrowRight, UserCheck, Key, FileDiff } from 'lucide-react';
+import { AlertTriangle, CheckCircle, XCircle, ArrowRight, UserCheck, Key, FileDiff } from 'lucide-react';
 
 export default function TransitionReview({ proposals, onApproveProposal, onRejectProposal }) {
   if (proposals.length === 0) {
     return (
-      <div className="p-12 text-center rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-        <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
-        <h3 className="text-base font-semibold text-white">No Pending State Change Proposals</h3>
-        <p className="text-xs text-slate-400 max-w-md mx-auto">
-          All autonomous agent state mutations have been processed. When an agent proposes a high-risk capability change or instruction update, it will appear here for verification.
+      <div className="p-12 text-center rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
+        <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto" />
+        <h3 className="text-sm font-semibold text-white">No Pending State Change Proposals</h3>
+        <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+          All autonomous agent state mutations have been processed.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="p-6 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <div className="flex items-center space-x-2">
-            <UserCheck className="w-5 h-5 text-cyan-400" />
-            <h2 className="text-lg font-bold text-white font-mono">
-              State Transition Review (Human-in-the-Loop)
-            </h2>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Enforcing the Core Product Principle: <strong className="text-slate-200">The agent can propose a state change, but it cannot unilaterally make that state trusted.</strong>
+          <h1 className="text-lg font-semibold text-white tracking-tight">State Transition Authorizations</h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Human-in-the-Loop review for elevated capabilities and protected state modifications.
           </p>
         </div>
-
-        <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+        <span className="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono w-fit">
           {proposals.length} Pending Approval
         </span>
       </div>
@@ -38,93 +32,78 @@ export default function TransitionReview({ proposals, onApproveProposal, onRejec
       {/* Proposals List */}
       <div className="space-y-4">
         {proposals.map((prop) => (
-          <div key={prop.id} className="p-6 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm space-y-6">
+          <div key={prop.id} className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
             {/* Top row */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800">
-              <div className="flex items-center space-x-3">
-                <span className="font-mono font-bold text-cyan-400 text-sm">{prop.id}</span>
-                <span className="text-xs text-slate-400">for</span>
-                <span className="font-mono text-sm text-white font-semibold">{prop.agentName}</span>
-                <span className="text-xs text-slate-500">({prop.submittedAt})</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-zinc-800/60 text-xs">
+              <div className="flex items-center space-x-2">
+                <span className="font-mono font-semibold text-zinc-200">{prop.id}</span>
+                <span className="text-zinc-500">for</span>
+                <span className="font-mono text-white font-medium">{prop.agentName}</span>
+                <span className="text-zinc-500 text-[11px]">({prop.submittedAt})</span>
               </div>
 
               <div className="flex items-center space-x-2">
-                <span className="text-xs text-slate-400">Proposed Transition:</span>
-                <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                <span className="font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300">
                   {prop.currentStateId}
                 </span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-500" />
-                <span className="font-mono text-xs px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+                <ArrowRight className="w-3.5 h-3.5 text-zinc-600" />
+                <span className="font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-medium">
                   {prop.proposedStateId}
                 </span>
               </div>
             </div>
 
-            {/* Risk Assessment Box */}
-            <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-800/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-start space-x-3">
-                <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-300 font-mono">
-                      Risk Tier: {prop.riskLevel}
-                    </span>
-                    <span className="text-slate-400 text-xs">| Proposer: {prop.proposer}</span>
-                  </div>
-                  <p className="text-xs text-amber-200/90 mt-1">{prop.riskReason}</p>
-                  <p className="text-[11px] text-amber-400/80 mt-1 font-mono">
-                    ⚠️ {prop.policyAssessment.flaggedInvariant}
-                  </p>
+            {/* Risk Callout */}
+            <div className="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-start space-x-3 text-xs">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <div className="font-medium text-amber-300">
+                  Risk Tier: {prop.riskLevel} — Proposer: {prop.proposer}
                 </div>
+                <p className="text-[11px] text-amber-200/80 mt-0.5">{prop.riskReason}</p>
+                <p className="text-[11px] text-amber-400 mt-1 font-mono">
+                  {prop.policyAssessment.flaggedInvariant}
+                </p>
               </div>
-
-              <span className="px-3 py-1 rounded bg-amber-900/60 border border-amber-700 text-amber-200 text-xs font-mono shrink-0">
-                HITL GATED
-              </span>
             </div>
 
-            {/* Diff breakdown */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                <FileDiff className="w-4 h-4 text-cyan-400" />
-                <span>Proposed Protected State Alterations</span>
-              </div>
+            {/* Diff View */}
+            <div className="space-y-2">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400 block">
+                Proposed State Modifications
+              </span>
 
-              <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 font-mono text-xs space-y-2">
+              <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800/80 font-mono text-[11px] space-y-2">
                 {prop.diff.addedTools.map((tool) => (
-                  <div key={tool} className="text-amber-400 flex items-center space-x-2">
+                  <div key={tool} className="text-amber-300 flex items-center space-x-1.5">
                     <span className="font-bold">+ Tool Binding:</span>
-                    <span className="bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800">{tool}</span>
+                    <span className="bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20">{tool}</span>
                   </div>
                 ))}
-                <div className="text-slate-300 pt-2 border-t border-slate-800/80">
-                  <span className="text-slate-500 block mb-1">Instruction Mutation:</span>
-                  <div className="p-2 rounded bg-slate-900 text-cyan-300 leading-relaxed">
+                <div className="text-zinc-300 pt-2 border-t border-zinc-800/60 leading-relaxed">
+                  <span className="text-zinc-500 block text-[10px]">Instruction Diff:</span>
+                  <div className="p-2 rounded bg-zinc-900/80 text-zinc-200 mt-1">
                     {prop.diff.instructionsChange}
                   </div>
                 </div>
-                <div className="text-slate-400 pt-1 text-[11px]">
-                  Workflow routing graph updated to: <code className="text-slate-200">{prop.diff.workflowChange}</code>
-                </div>
               </div>
             </div>
 
-            {/* Approval Controls */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+            {/* Actions */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-3 text-xs">
               <button
                 onClick={() => onRejectProposal(prop.id)}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center justify-center space-x-1.5"
+                className="w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
               >
-                <XCircle className="w-4 h-4 text-rose-400" />
-                <span>Reject & Rollback Proposal</span>
+                Reject & Rollback
               </button>
 
               <button
                 onClick={() => onApproveProposal(prop.id)}
-                className="w-full sm:w-auto px-5 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-600/20 border border-cyan-400/40 transition-all flex items-center justify-center space-x-1.5"
+                className="w-full sm:w-auto px-4 py-2 rounded-lg font-medium bg-zinc-100 hover:bg-white text-zinc-900 shadow-sm transition-colors flex items-center justify-center space-x-1.5"
               >
-                <Key className="w-4 h-4 text-cyan-200" />
-                <span>Approve & Sign Commitment (Commit S102)</span>
+                <Key className="w-3.5 h-3.5 text-zinc-900" />
+                <span>Approve & Commit ({prop.proposedStateId})</span>
               </button>
             </div>
           </div>
